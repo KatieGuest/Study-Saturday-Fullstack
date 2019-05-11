@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import axios from "axios";
+import addStudent from "./Main";
 
 export default class NewStudentForm extends Component {
   constructor() {
@@ -22,11 +22,16 @@ export default class NewStudentForm extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    this.setState({
-      firstName: "",
-      lastName: "",
-      email: ""
-    });
+    try {
+      this.props.addStudent(this.state);
+      this.setState({
+        firstName: "",
+        lastName: "",
+        email: ""
+      });
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   render() {

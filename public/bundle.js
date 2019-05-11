@@ -35407,6 +35407,8 @@ var _NewStudentForm2 = _interopRequireDefault(_NewStudentForm);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -35431,16 +35433,17 @@ var Main = function (_Component) {
 
     _this.selectStudent = _this.selectStudent.bind(_this);
     _this.handleClick = _this.handleClick.bind(_this);
+    _this.addStudent = _this.addStudent.bind(_this);
     return _this;
   }
 
   _createClass(Main, [{
-    key: 'componentDidMount',
+    key: "componentDidMount",
     value: function componentDidMount() {
       this.getStudents();
     }
   }, {
-    key: 'getStudents',
+    key: "getStudents",
     value: function () {
       var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
         var _ref2, data;
@@ -35449,28 +35452,28 @@ var Main = function (_Component) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                console.log('fetching');
+                console.log("fetching");
                 _context.prev = 1;
                 _context.next = 4;
-                return _axios2.default.get('/student');
+                return _axios2.default.get("/student");
 
               case 4:
                 _ref2 = _context.sent;
                 data = _ref2.data;
 
                 this.setState({ students: data });
-                console.log('THis is the State', this.state);
+                console.log("This is the State", this.state);
                 _context.next = 13;
                 break;
 
               case 10:
                 _context.prev = 10;
-                _context.t0 = _context['catch'](1);
+                _context.t0 = _context["catch"](1);
 
                 console.error(_context.t0);
 
               case 13:
-              case 'end':
+              case "end":
                 return _context.stop();
             }
           }
@@ -35484,55 +35487,99 @@ var Main = function (_Component) {
       return getStudents;
     }()
   }, {
-    key: 'selectStudent',
+    key: "selectStudent",
     value: function selectStudent(student) {
       return this.setState({
         selectedStudent: student
       });
     }
   }, {
-    key: 'handleClick',
+    key: "handleClick",
     value: function handleClick(e) {
       return this.setState({
         showStudent: !this.state.showStudent
       });
     }
   }, {
-    key: 'render',
+    key: "addStudent",
+    value: function () {
+      var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(newStudent) {
+        var res;
+        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.prev = 0;
+                _context2.next = 3;
+                return _axios2.default.post("/student", newStudent);
+
+              case 3:
+                res = _context2.sent;
+
+                this.setState(function (previousState) {
+                  return {
+                    students: [].concat(_toConsumableArray(previousState.students), [res.data])
+                  };
+                });
+                _context2.next = 10;
+                break;
+
+              case 7:
+                _context2.prev = 7;
+                _context2.t0 = _context2["catch"](0);
+
+                console.error(_context2.t0);
+
+              case 10:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this, [[0, 7]]);
+      }));
+
+      function addStudent(_x) {
+        return _ref3.apply(this, arguments);
+      }
+
+      return addStudent;
+    }()
+  }, {
+    key: "render",
     value: function render() {
-      console.log('this is the state in main', this.state);
+      console.log("this is the state in main", this.state);
       return _react2.default.createElement(
-        'div',
+        "div",
         null,
         _react2.default.createElement(
-          'h1',
+          "h1",
           null,
-          'Students'
+          "Students"
         ),
         _react2.default.createElement(
-          'button',
+          "button",
           { onClick: this.handleClick },
-          'Add Student'
+          "Add Student"
         ),
-        this.state.showStudent ? _react2.default.createElement(_NewStudentForm2.default, null) : null,
+        this.state.showStudent ? _react2.default.createElement(_NewStudentForm2.default, { addStudent: this.addStudent }) : null,
         _react2.default.createElement(
-          'table',
+          "table",
           null,
           _react2.default.createElement(
-            'thead',
+            "thead",
             null,
             _react2.default.createElement(
-              'tr',
+              "tr",
               null,
               _react2.default.createElement(
-                'th',
+                "th",
                 null,
-                'Name'
+                "Name"
               ),
               _react2.default.createElement(
-                'th',
+                "th",
                 null,
-                'Tests'
+                "Tests"
               )
             )
           ),
@@ -35548,6 +35595,12 @@ var Main = function (_Component) {
 
   return Main;
 }(_react.Component);
+
+//refactor to redux:
+//new folder, store, for reducers--declare state, manipulate(thunks)
+//import provider from react-redux, wrap everthing
+//import store from folder to index.js
+
 
 exports.default = Main;
 
@@ -36591,9 +36644,9 @@ var _react = __webpack_require__(45);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _axios = __webpack_require__(137);
+var _Main = __webpack_require__(358);
 
-var _axios2 = _interopRequireDefault(_axios);
+var _Main2 = _interopRequireDefault(_Main);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -36633,11 +36686,16 @@ var NewStudentForm = function (_Component) {
     key: "handleSubmit",
     value: function handleSubmit(event) {
       event.preventDefault();
-      this.setState({
-        firstName: "",
-        lastName: "",
-        email: ""
-      });
+      try {
+        this.props.addStudent(this.state);
+        this.setState({
+          firstName: "",
+          lastName: "",
+          email: ""
+        });
+      } catch (error) {
+        console.log(error);
+      }
     }
   }, {
     key: "render",
